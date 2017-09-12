@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE cxchelptopics SYSTEM "CXCHelp.dtd">
+  <cxchelptopics>
+  <ENTRY key="pars2tab" context="tools" seealsogroups="sumtools">
+    <SYNOPSIS>
+      Convert a stack of parameter files to a DM table
+    </SYNOPSIS>
+    <ADDRESS>
+      <URL>
+          tools/sum.html#sec:pars2html
+      </URL>
+      <LABEL>
+          sec:pars2html
+      </LABEL>
+    </ADDRESS>
+    <DESC>
+      <PARA>
+         `pars2tab' converts a stack of parameter files into a table.  
+         The datatype is extracted from the .par files; the parameter
+         prompt is turned into the column description.
+      </PARA>
+      <PARA>
+         pars2tab will deal with parameter files with different
+         parameters; values missing from one param will get set to the
+         appropriate NULL/NaN (if applicable).
+      </PARA>
+    </DESC>
+
+    <QEXAMPLELIST>
+      <QEXAMPLE>
+        <SYNTAX>
+           <LINE>
+            pars2tab infile="*obs0a.par" outfile="obpar_db.fits"
+           </LINE>
+        </SYNTAX>
+        <DESC>
+           <PARA>
+              Convert all the observation parameters to a table.
+           </PARA>
+        </DESC>
+      </QEXAMPLE>
+    </QEXAMPLELIST>
+    <PARAMLIST>
+       <PARAM name="infile" type="file" filetype="input" reqd="yes" stacks="yes">
+         <SYNOPSIS>
+           The input files.  Stack of .par files.
+         </SYNOPSIS>
+       </PARAM>
+       <PARAM name="outfile" type="file" filetype="output" reqd="yes">
+         <SYNOPSIS>
+            The output file name.
+         </SYNOPSIS>
+       </PARAM>
+    </PARAMLIST>
+    <VERSION>
+       today
+    </VERSION>
+    <LASTMODIFIED>
+       yesterday
+    </LASTMODIFIED>
+  </ENTRY>
+</cxchelptopics>
