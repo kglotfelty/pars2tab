@@ -7,6 +7,6 @@ Name: readline
 Description: GNU readline
 Version: 7.0
 Requires: 
-Libs: -L${libdir} -lreadline -lhistory -ltinfow -lncursesw
+Libs: -L${libdir} -lreadline -lhistory -lncursesw #-ltinfow 
 ### NO CONDA ###Libs: -L${libdir} -lreadline -lhistory 
 Cflags: -I${includedir}
