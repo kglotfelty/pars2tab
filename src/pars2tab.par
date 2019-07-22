@@ -1,5 +1,5 @@
 infile,f,a,"",,,"Input list of files"
 outfile,f,a,"",,,"Output file name"
-clobber,b,h,"no",,,"Overwrite output file if it exists?"
+clobber,b,h,no,,,"Overwrite output file if it exists?"
 verbose,i,h,0,0,0,"verbosity"
 mode,s,h,"ql",,,

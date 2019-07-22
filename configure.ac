@@ -1,25 +1,15 @@
 AC_INIT([pars2tab], [1.0.0], [glotfeltyk@si.edu])
 AM_INIT_AUTOMAKE([foreign -Wall])
 AC_PROG_CXX
-AC_PROG_SED
-#AC_CONFIG_FILES([lib/pkgconfig/ascdm.pc lib/pkgconfig/readline.pc lib/pkgconfig/region.pc ])
+LT_INIT
+
+# -- Hack to provide missing pkg-config files
 
 sed s,@prefix@,$prefix,g < lib/pkgconfig/ascdm.pc.in > lib/pkgconfig/ascdm.pc
 sed s,@prefix@,$prefix,g < lib/pkgconfig/readline.pc.in > lib/pkgconfig/readline.pc
 sed s,@prefix@,$prefix,g < lib/pkgconfig/region.pc.in > lib/pkgconfig/region.pc
 
-  
-#~ AC_CHECK_LIB( [readline], [readline], [READLINE_LIBS="-lreadline"],
- #~ [
-  #~ AC_CHECK_LIB( [readline], [readline], [READLINE_LIBS="-lreadline"],
-   #~ AC_MSG_ERROR( [Readline is borked]),
-   #~ [-lhistory -ltwinfow])
- #~ ],
- #~ [-lhistory -ltermcap])
-
-#~ AC_CHECK_LIB([readline],[readline])
-
-
+# -- Readline -- there has got to be a better way to do this 
 
 AC_CHECK_FUNC(tgetent,
    [READLINE_SUPPLIB=],
@@ -37,19 +27,17 @@ AC_CHECK_FUNC(tgetent,
       ])
    ])
 
-
-
-
 AC_CHECK_LIB(readline,readline,[READLINELIB="-lreadline -lhistory -lncurses"],
 	AC_MSG_ERROR([
 You need the GNU readline library(ftp://ftp.gnu.org/gnu/readline/ ) to build
 this program!
 ]), [$READLINE_SUPPLIB])
 
-
 LIBS="$LIBS $PROCSTATLIB $READLINELIB $READLINE_SUPPLIB"
 
-export PKG_CONFIG_PATH=$prefix/lib/pkgconfig:$prefix/ots/lib/pkgconfig
+
+
+export PKG_CONFIG_PATH=$prefix/lib/pkgconfig:$prefix/ots/lib/pkgconfig:$PKG_CONFIG_PATH
 
 PKG_CONFIG_PATH=./lib/pkgconfig:${PKG_CONFIG_PATH}
 
