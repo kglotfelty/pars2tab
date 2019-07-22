@@ -53,10 +53,10 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
   Makefile
   src/Makefile
-  boiler/Makefile
+  wrapper/Makefile
 ])
 
-AC_CONFIG_FILES([boiler/pars2tab:boiler/wrapper.sh],[chmod +x boiler/pars2tab])
+AC_CONFIG_FILES([wrapper/pars2tab:wrapper/wrapper.sh],[chmod +x wrapper/pars2tab])
 
 AC_OUTPUT
   
