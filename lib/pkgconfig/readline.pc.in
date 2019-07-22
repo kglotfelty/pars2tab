@@ -1,4 +1,4 @@
-prefix=/export/ciao-4.11
+prefix=@prefix@
 exec_prefix=${prefix}
 libdir=${exec_prefix}/ots/lib
 includedir=${prefix}/ots/include
@@ -7,6 +7,6 @@ Name: readline
 Description: GNU readline
 Version: 7.0
 Requires: 
-Libs: -L${libdir} -lreadline -lhistory -lncursesw #-ltinfow 
+Libs: -L${libdir} -lreadline -lhistory 
 ### NO CONDA ###Libs: -L${libdir} -lreadline -lhistory 
 Cflags: -I${includedir}
