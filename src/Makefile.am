@@ -11,3 +11,7 @@ pars2tab_LDFLAGS = -rpath $(prefix)/lib -rpath $(prefix)/ots/lib
 
 dist_param_DATA = pars2tab.par
 dist_ahelp_DATA = pars2tab.xml
+
+install-data-hook:
+	chmod 444 $(paramdir)/$(dist_param_DATA)
+	chmod 444 $(ahelpdir)/$(dist_ahelp_DATA)
