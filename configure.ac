@@ -1,7 +1,7 @@
 AC_INIT([pars2tab], [1.0.0], [glotfeltyk@si.edu])
 AM_INIT_AUTOMAKE([foreign -Wall])
 AC_PROG_CXX
-LT_INIT
+#### LT_INIT
 
 # -- Hack to provide missing pkg-config files
 
