@@ -1,7 +1,7 @@
 prefix=@prefix@
 exec_prefix=${prefix}
-libdir=${exec_prefix}/ots/lib
-includedir=${prefix}/ots/include
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
 
 Name: ascdm
 Description: GNU readline
