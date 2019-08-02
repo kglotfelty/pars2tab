@@ -1,6 +1,6 @@
-SUBDIRS = src wrapper
+SUBDIRS = src wrapper test
 
-EXTRA_DIST = lib
+EXTRA_DIST = pkgconfig
 
 distclean-local:
-	-rm -f lib/pkgconfig/ascdm.pc lib/pkgconfig/readline.pc lib/pkgconfig/region.pc
+	-rm -f pkgconfig/*.pc

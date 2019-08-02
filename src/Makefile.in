@@ -34,6 +34,9 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 binexe_PROGRAMS = $(am__EXEEXT_1)
+
+# problems with libstdc++ and cxcparam on Linux :(
+@LINUX_TRUE@am__append_1 = -L$(prefix)/ots/lib -lstdc++
 subdir = src
 DIST_COMMON = $(dist_ahelp_DATA) $(dist_param_DATA) \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in
@@ -51,7 +54,7 @@ PROGRAMS = $(binexe_PROGRAMS)
 am_pars2tab_OBJECTS = pars2tab-pars2tab.$(OBJEXT)
 pars2tab_OBJECTS = $(am_pars2tab_OBJECTS)
 am__DEPENDENCIES_1 =
-pars2tab_DEPENDENCIES = $(am__DEPENDENCIES_1)
+pars2tab_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -130,6 +133,7 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PKG_CONFIG = @PKG_CONFIG@
+SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -183,7 +187,8 @@ paramdir = $(prefix)/param
 ahelpdir = $(prefix)/share/doc/xml
 pars2tab_SOURCES = pars2tab.cc
 pars2tab_CPPFLAGS = $(CIAO_CFLAGS)
-pars2tab_LDADD = $(CIAO_LIBS) 
+pars2tab_LDADD = $(CIAO_LIBS) $(am__append_1)
+pars2tab_LINK = $(CXX) -o $@ -Wl,-rpath,$(prefix)/lib -Wl,-rpath,$(prefix)/ots/lib 
 dist_param_DATA = $(tool).par
 dist_ahelp_DATA = $(tool).xml
 all: all-am
@@ -259,7 +264,7 @@ clean-binexePROGRAMS:
 	-test -z "$(binexe_PROGRAMS)" || rm -f $(binexe_PROGRAMS)
 pars2tab$(EXEEXT): $(pars2tab_OBJECTS) $(pars2tab_DEPENDENCIES) 
 	@rm -f pars2tab$(EXEEXT)
-	$(CXXLINK) $(pars2tab_OBJECTS) $(pars2tab_LDADD) $(LIBS)
+	$(pars2tab_LINK) $(pars2tab_OBJECTS) $(pars2tab_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -543,8 +548,8 @@ uninstall-am: uninstall-binexePROGRAMS uninstall-dist_ahelpDATA \
 
 
 install-data-hook:
-	chmod 444 $(paramdir)/$(dist_param_DATA)
-	chmod 444 $(ahelpdir)/$(dist_ahelp_DATA)
+	chmod a-w $(paramdir)/$(dist_param_DATA)
+	chmod a-w $(ahelpdir)/$(dist_ahelp_DATA)
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -213,7 +213,7 @@ do
   # run the tool
   case ${testid} in
     # !!6
-    test1 ) test1_string='pars2tab "${INDIR}/*prop3.par" $outfile > /dev/null'
+    test1 ) test1_string='pars2tab "${INDIR}/*prop3.par" $outfile clob+'
             ;;
 
   esac
