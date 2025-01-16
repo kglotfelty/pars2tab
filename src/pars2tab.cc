@@ -23,6 +23,8 @@ extern "C" {
 #include <dslib.h>
 #include <stack.h>
 #include <dsnan.h>
+#include <iconv.h>
+#include <errno.h>
 }
 
 #include <algorithm>
@@ -36,7 +38,6 @@ using std::vector;
 
 
 #include <cstdlib>
-
 
 #ifndef TRUE
 #define TRUE (1)
@@ -86,8 +87,8 @@ int main(int argc, char** argv)
     err_msg("ERROR: Could not expand stack '%s'\n", infile );
     return(-1);
   } else if (( stk_count(inStack) == 0 ) ||
-	     ( ( stk_count(inStack) == 1 ) && 
-	       ( strlen(stk_read_num(inStack,1))==0 ))) {
+             ( ( stk_count(inStack) == 1 ) && 
+               ( strlen(stk_read_num(inStack,1))==0 ))) {
     err_msg("ERROR: Empty stack '%s'\n", infile );
   }
   stk_rewind(inStack);
@@ -100,6 +101,16 @@ int main(int argc, char** argv)
   map<string,long>StrLens;
   map<string,string>AllPrompts;
   map<string,string>AllUnits;
+
+  int myerr;
+  iconv_t translit;  
+  errno = 0;
+  translit = iconv_open("ASCII//TRANSLIT", "UTF-8");
+  myerr = errno;
+  if (myerr != 0) { 
+      err_msg("ERROR: Problem creating translation: %s", strerror(myerr));
+      return -1;
+  }
   
   while ( NULL != ( curFile = stk_read_next( inStack ))) {
     paramfile paramFile;
@@ -115,7 +126,7 @@ int main(int argc, char** argv)
 
     if ( NULL == ( pList = pmatchopen( paramFile, (char*)"*" ))) {
       err_msg("ERROR: Problems reading parameter file '%s'.  Error message is:",
-	      curFile, paramerrstr() );
+              curFile, paramerrstr() );
       continue;
     }
 
@@ -138,7 +149,7 @@ int main(int argc, char** argv)
     AllPrompts[curPar] = string("Input file name");
     AllUnits[curPar] = string("");
     if (find( AllPars.begin(), AllPars.end(), string(curPar)) 
-	== AllPars.end()) {
+        == AllPars.end()) {
       AllPars.push_back( string(curPar ));
     }
       
@@ -155,13 +166,13 @@ int main(int argc, char** argv)
 
 
       if ( AllTypes.find( curPar ) != AllTypes.end() ) {
-	if ( AllTypes[curPar] != string(type) ) {
-	  err_msg("WARNING: Parameter '%s' has different datatype in file '%s'. "
-		  "Looking for datatype '%s', found '%s'", curPar, curFile, 
-		  AllTypes[curPar].c_str(), type );
-	}
+        if ( AllTypes[curPar] != string(type) ) {
+          err_msg("WARNING: Parameter '%s' has different datatype in file '%s'. "
+                  "Looking for datatype '%s', found '%s'", curPar, curFile, 
+                  AllTypes[curPar].c_str(), type );
+        }
       } else {
-	AllTypes[curPar] = string( type );
+        AllTypes[curPar] = string( type );
       }
       
       ParamValues[curPar] = string(value);
@@ -174,12 +185,12 @@ int main(int argc, char** argv)
       char *unit;
       unit = NULL;
       if ( NULL != ( lptr = strrchr( prompt, '[' ) ) ) {
-	if ( NULL != strchr( lptr , ']') ) {
-	  unit = lptr+1;
-	  *lptr = '\0';  /* Terminate prompt string*/
-	  lptr = strchr( unit, ']' );
-	  *lptr = '\0'; /* Terminate unit string */
-	}
+        if ( NULL != strchr( lptr , ']') ) {
+          unit = lptr+1;
+          *lptr = '\0';  /* Terminate prompt string*/
+          lptr = strchr( unit, ']' );
+          *lptr = '\0'; /* Terminate unit string */
+        }
       }
       
       if ( NULL == unit ) unit=(char*)"";
@@ -190,8 +201,8 @@ int main(int argc, char** argv)
 
       /* Save AllPars so that values are stored in order */
       if (find( AllPars.begin(), AllPars.end(), string(curPar)) 
-	  == AllPars.end()) {
-	AllPars.push_back( string(curPar ));
+          == AllPars.end()) {
+        AllPars.push_back( string(curPar ));
       }
       
     } /* end while curPar, pmatchlist */
@@ -232,30 +243,30 @@ int main(int argc, char** argv)
     switch( *type ) {
     case 'b':
       AllColumns[name] = dmColumnCreate( outBlock, (char*)name.c_str(), 
-					 dmBOOL, 0, 
-					 (char*)AllUnits[name].c_str(), 
-					 (char*)AllPrompts[name].c_str() );
+                                         dmBOOL, 0, 
+                                         (char*)AllUnits[name].c_str(), 
+                                         (char*)AllPrompts[name].c_str() );
       break;
     case 'r':
       AllColumns[name] = dmColumnCreate( outBlock, (char*)name.c_str(), 
-					 dmDOUBLE, 0, 
-					 (char*)AllUnits[name].c_str(), 
-					 (char*)AllPrompts[name].c_str() );
+                                         dmDOUBLE, 0, 
+                                         (char*)AllUnits[name].c_str(), 
+                                         (char*)AllPrompts[name].c_str() );
       break;
     case 'i':
       AllColumns[name] = dmColumnCreate( outBlock, (char*)name.c_str(), 
-					 dmLONG, 0, 
-					 (char*)AllUnits[name].c_str(), 
-					 (char*)AllPrompts[name].c_str() );
+                                         dmLONG, 0, 
+                                         (char*)AllUnits[name].c_str(), 
+                                         (char*)AllPrompts[name].c_str() );
       dmDescriptorSetNull_l(  AllColumns[name], lnull );
       break;
     case 's':
     case 'f':
     case 'p': /* 'pset' */
       AllColumns[name] = dmColumnCreate( outBlock, (char*)name.c_str(), 
-					 dmTEXT, StrLens[name]+1, 
-					 (char*)AllUnits[name].c_str(), 
-					 (char*)AllPrompts[name].c_str() );
+                                         dmTEXT, StrLens[name]+1, 
+                                         (char*)AllUnits[name].c_str(), 
+                                         (char*)AllPrompts[name].c_str() );
       break;
       
     default:
@@ -263,8 +274,6 @@ int main(int argc, char** argv)
     }
 
   } /* end loop over parameter names */
-
-
 
 
   /* now populate data */
@@ -281,57 +290,87 @@ int main(int argc, char** argv)
       
       switch( *type ) {
       case 'b':
-	unsigned char bval;
-	if ( values->find(name) == values->end() ) {
-	  bval = FALSE;
-	} else {
-	  if ( values->find(name)->second == string("yes")) 
-	    bval = TRUE;
-	  else
-	    bval = FALSE;
-	}
-	dmSetScalar_q( AllColumns[name], bval );
-	break;
+        unsigned char bval;
+        if ( values->find(name) == values->end() ) {
+          bval = FALSE;
+        } else {
+          if ( values->find(name)->second == string("yes")) 
+            bval = TRUE;
+          else
+            bval = FALSE;
+        }
+        dmSetScalar_q( AllColumns[name], bval );
+        break;
 
       case 'r':
-	double dval;
-	if ( values->find(name) == values->end() ) {
-	  ds_MAKE_DNAN(dval);
-	} else  if ( values->find(name)->second == string("INDEF") ) {
-	  ds_MAKE_DNAN(dval);
-	} else {
-	  dval = atof(values->find(name)->second.c_str()) ;
-	}
-	dmSetScalar_d( AllColumns[name], dval );
+        double dval;
+        if ( values->find(name) == values->end() ) {
+          ds_MAKE_DNAN(dval);
+        } else  if ( values->find(name)->second == string("INDEF") ) {
+          ds_MAKE_DNAN(dval);
+        } else {
+          dval = atof(values->find(name)->second.c_str()) ;
+        }
+        dmSetScalar_d( AllColumns[name], dval );
 
-	break;
+        break;
 
       case 'i':
-	long lval;
-	if ( values->find(name) == values->end() ) {
-	  lval = INDEFL;
-	} else  if ( values->find(name)->second == string("INDEF") ) {
-	  lval = INDEFL;
-	} else {
-	  lval = atol(values->find(name)->second.c_str()) ;
-	}
-	dmSetScalar_l( AllColumns[name], lval );
-	break;
+        long lval;
+        if ( values->find(name) == values->end() ) {
+          lval = INDEFL;
+        } else  if ( values->find(name)->second == string("INDEF") ) {
+          lval = INDEFL;
+        } else {
+          lval = atol(values->find(name)->second.c_str()) ;
+        }
+        dmSetScalar_l( AllColumns[name], lval );
+        break;
 
       case 's':
       case 'f':
       case 'p':
-	const char *cval;
-	if ( values->find(name) == values->end() ) {
-	  cval = "";
-	} else {
-	  cval = values->find(name)->second.c_str();
-	}
-	dmSetScalar_c( AllColumns[name], (char*)cval );
-	break;
+        const char *cval;
+        if ( values->find(name) == values->end() ) {
+          cval = "";
+        } else {
+          cval = values->find(name)->second.c_str();
+        }
+        
+        /* Convert UTF-8 to ASCII */
+        char *cval_fixed;
+        size_t in_len;
+        size_t out_len;
+
+        in_len = strlen(cval)+1;
+        out_len = in_len;
+        cval_fixed = (char *)calloc(out_len, sizeof(char*));
+
+        char *inPtr;
+        char *outPtr;
+        inPtr = (char*)cval;  /* This is an -ism of iconv */
+        outPtr = cval_fixed;
+
+        size_t i_retval;
+        i_retval = iconv(translit, &inPtr , &in_len, &outPtr , &out_len);
+        myerr = errno;
+        if (i_retval == -1)
+        {
+            err_msg("ERROR: Problem translating '%s': %s",
+                    cval, strerror(myerr));
+            return(-1);            
+        } else if ((i_retval > 0) && (verbose > 0)) {
+            printf("Converted %ld characters\n", i_retval);            
+        }
+        /* End convert */
+        
+        dmSetScalar_c( AllColumns[name], cval_fixed );
+
+        free(cval_fixed);
+        break;
 
       default:
-	break;
+        break;
       } /* end type */
 
 
@@ -342,6 +381,7 @@ int main(int argc, char** argv)
     
   } /* end over values */
 
+  iconv_close(translit);
 
   dmTableClose( outBlock );
 
