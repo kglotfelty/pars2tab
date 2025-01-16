@@ -8,7 +8,7 @@ binexe_PROGRAMS = $(tool)
 
 pars2tab_SOURCES = pars2tab.cc
 pars2tab_CPPFLAGS = $(CIAO_CFLAGS)
-pars2tab_LDADD = $(CIAO_LIBS) 
+pars2tab_LDADD = $(CIAO_LIBS) $(LIBICONV)
 pars2tab_LINK = $(CXX) -o $@ -Wl,-rpath,$(prefix)/lib -Wl,-rpath,$(prefix)/ots/lib 
 
 # problems with libstdc++ and cxcparam on Linux :(

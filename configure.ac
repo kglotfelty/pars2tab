@@ -1,10 +1,11 @@
-AC_INIT([pars2tab], [4.16.0], [glotfeltyk@si.edu])
+AC_INIT([pars2tab], [4.17.0], [glotfeltyk@si.edu])
 AM_INIT_AUTOMAKE([foreign -Wall])
 AM_MAINTAINER_MODE([disable])
 AC_PROG_CC
 AM_PROG_CC_C_O
 AC_PROG_CXX
 AC_PROG_SED
+AM_ICONV
 
 PKG_CONFIG_PATH=$prefix/lib/pkgconfig:$prefix/ots/lib/pkgconfig:$PKG_CONFIG_PATH
 PKG_CONFIG_PATH=./pkgconfig:${PKG_CONFIG_PATH}
