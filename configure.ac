@@ -1,4 +1,4 @@
-AC_INIT([pars2tab], [4.17.0], [glotfeltyk@si.edu])
+AC_INIT([pars2tab], [4.18.0], [glotfeltyk@si.edu])
 AM_INIT_AUTOMAKE([foreign -Wall])
 AM_MAINTAINER_MODE([disable])
 AC_PROG_CC
@@ -71,4 +71,4 @@ AC_CONFIG_FILES([wrapper/pars2tab:wrapper/wrapper.sh],[chmod +x wrapper/pars2tab
 # -- Go! -----------
 
 AC_OUTPUT
-  
+
