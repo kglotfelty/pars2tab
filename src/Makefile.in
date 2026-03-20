@@ -110,8 +110,7 @@ PROGRAMS = $(binexe_PROGRAMS)
 am_pars2tab_OBJECTS = pars2tab-pars2tab.$(OBJEXT)
 pars2tab_OBJECTS = $(am_pars2tab_OBJECTS)
 am__DEPENDENCIES_1 =
-pars2tab_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
+pars2tab_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -316,8 +315,8 @@ paramdir = $(prefix)/param
 ahelpdir = $(prefix)/share/doc/xml
 pars2tab_SOURCES = pars2tab.cc
 pars2tab_CPPFLAGS = $(CIAO_CFLAGS)
-pars2tab_LDADD = $(CIAO_LIBS) $(LIBICONV) $(am__append_1)
-pars2tab_LINK = $(CXX) -o $@ -Wl,-rpath,$(prefix)/lib -Wl,-rpath,$(prefix)/ots/lib 
+pars2tab_LDADD = $(CIAO_LIBS) @LIBICONV@ $(am__append_1)
+pars2tab_LINK = $(CXX) -o $@ -Wl,-rpath,$(prefix)/lib -Wl
 dist_param_DATA = $(tool).par
 dist_ahelp_DATA = $(tool).xml
 all: all-am
