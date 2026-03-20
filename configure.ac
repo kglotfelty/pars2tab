@@ -54,7 +54,7 @@ PKG_CHECK_MODULES( [CIAO], [
 
 # ------------
 
-AM_CONDITIONAL([LINUX], [test x`uname` == xLinux])
+#~ AM_CONDITIONAL([LINUX], [test x`uname` == xLinux])
 
 
 # -------------- Which files to configure ----------

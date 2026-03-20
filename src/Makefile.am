@@ -12,13 +12,7 @@ pars2tab_LDADD = $(CIAO_LIBS)
 # Cannot get this to work in conda environment using macros
 pars2tab_LDADD +=  @LIBICONV@
 pars2tab_LDADD += -liconv
-pars2tab_LINK = $(CXX) -o $@ -Wl,-rpath,$(prefix)/lib -Wl
-
-# problems with libstdc++ and cxcparam on Linux :(
-if LINUX
-pars2tab_LDADD += -L$(prefix)/ots/lib -lstdc++
-endif
-
+pars2tab_LINK = $(CXX) -o $@ -Wl,-rpath,$(prefix)/lib
 
 dist_param_DATA = $(tool).par
 dist_ahelp_DATA = $(tool).xml

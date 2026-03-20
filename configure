@@ -589,8 +589,6 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
-LINUX_FALSE
-LINUX_TRUE
 CIAO_LIBS
 CIAO_CFLAGS
 PKG_CONFIG_LIBDIR
@@ -5803,14 +5801,7 @@ fi
 
 # ------------
 
- if test x`uname` == xLinux; then
-  LINUX_TRUE=
-  LINUX_FALSE='#'
-else
-  LINUX_TRUE='#'
-  LINUX_FALSE=
-fi
-
+#~ AM_CONDITIONAL([LINUX], [test x`uname` == xLinux])
 
 
 # -------------- Which files to configure ----------
@@ -5998,10 +5989,6 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${am__fastdepCXX_TRUE}" && test -z "${am__fastdepCXX_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCXX\" was never defined.
-Usually this means the macro was only invoked conditionally." "$LINENO" 5
-fi
-if test -z "${LINUX_TRUE}" && test -z "${LINUX_FALSE}"; then
-  as_fn_error $? "conditional \"LINUX\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 
